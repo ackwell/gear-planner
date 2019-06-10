@@ -7,7 +7,17 @@ module.exports = {
 		root: __dirname
 	},
 	use: [
-		eslint(),
+		eslint({
+			eslint: {
+				baseConfig: {
+					extends: [
+						'plugin:prettier/recommended',
+						'prettier/babel',
+						'prettier/react',
+					],
+				},
+			},
+		}),
 		react({
 			html: { title: 'biggerdeeps' },
 
