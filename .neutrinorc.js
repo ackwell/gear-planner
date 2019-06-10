@@ -12,9 +12,13 @@ module.exports = {
 				baseConfig: {
 					extends: [
 						'plugin:prettier/recommended',
-						'prettier/babel',
+						'prettier/@typescript-eslint',
 						'prettier/react',
 					],
+					parser: '@typescript-eslint/parser',
+					parserOptions: {
+						project: './tsconfig.json',
+					},
 				},
 			},
 		}),
