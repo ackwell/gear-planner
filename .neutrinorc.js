@@ -26,7 +26,7 @@ module.exports = {
 			html: { title: 'biggerdeeps' },
 
 			babel: {
-				presets: ['@babel/typescript']
+				presets: ['@babel/typescript'],
 			}
 		}),
 
@@ -37,7 +37,21 @@ module.exports = {
 			neutrino.config.module.rule('compile').test(/\.(wasm|m?jsx?|tsx?)$/);
 		},
 
-		// This is Very Important
+		// Prepend decorators plugin
+		neutrino => {
+			neutrino.config.module
+				.rule('compile')
+					.use('babel')
+						.tap(options => ({
+							...options,
+							plugins: [
+								['@babel/plugin-proposal-decorators', {legacy: true}],
+								...options.plugins,
+							],
+						}))
+		},
+
+		// Webpackbar, because _that's_ important
 		neutrino => neutrino.config.plugin('webpackbar').use(new WebpackBar()),
 	],
 }

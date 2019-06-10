@@ -1,9 +1,12 @@
 import React from 'react'
 import {App} from './components/App'
 import {BrowserRouter as Router} from 'react-router-dom'
+import {GlobalStoreProvider} from './state'
 
 export const Root = () => (
-	<Router>
-		<App />
-	</Router>
+	<GlobalStoreProvider>
+		<Router>
+			<App />
+		</Router>
+	</GlobalStoreProvider>
 )

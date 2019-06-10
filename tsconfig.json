@@ -4,16 +4,15 @@
 		"module": "commonjs",
 		"moduleResolution": "node",
 		"jsx": "preserve",
-
+		"experimentalDecorators": true,
 		"strict": true,
-
 		"esModuleInterop": true,
 		"isolatedModules": true,
 		"allowSyntheticDefaultImports": true,
-
 		"lib": [
 			"dom",
 			"esnext"
 		],
+		"baseUrl": "./src",
 	}
 }

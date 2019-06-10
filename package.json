@@ -13,12 +13,15 @@
     "types": "tsc --noEmit"
   },
   "dependencies": {
+    "mobx": "^5.10.1",
+    "mobx-react-lite": "^1.4.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
+    "@babel/plugin-proposal-decorators": "^7.4.4",
     "@babel/preset-typescript": "^7.3.3",
     "@neutrinojs/eslint": "^9.0.0-rc.3",
     "@neutrinojs/react": "^9.0.0-rc.3",
