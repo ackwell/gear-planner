@@ -19,8 +19,14 @@ const Filter = observer(() => {
 		<>
 			{LoadingState[classJob.state]}
 			<select>
-				{classJob.classJobs.map(cj => (
-					<option>{cj.name}</option>
+				{classJob.categories.map(cat => (
+					<optgroup label={cat.name}>
+						{classJob.classJobs
+							.filter(cj => cj.category.id === cat.id)
+							.map(cj => (
+								<option value={cj.id}>{cj.name}</option>
+							))}
+					</optgroup>
 				))}
 			</select>
 		</>
