@@ -1,14 +1,32 @@
-import {observable} from 'mobx'
+import {observable, flow} from 'mobx'
+import {ClassJob, getClassJobs} from '../api'
 
-interface ClassJob {
-	id: number
-	abbreviation: string
+export enum LoadingState {
+	WAITING,
+	LOADING,
+	COMPLETE,
 }
 
 export class ClassJobStore {
-	// TODO: like, load this, lol
-	@observable.ref classJobs: ClassJob[] = [
-		{id: 1, abbreviation: 'GLD'},
-		{id: 2, abbreviation: 'PGL'},
-	]
+	@observable.ref state: LoadingState = LoadingState.WAITING
+	@observable.ref classJobs: ClassJob[] = []
+
+	// @action
+	ensure = flow(function*(this: ClassJobStore) {
+		// Only need to load classjobs once
+		if (this.state !== LoadingState.WAITING) {
+			return
+		}
+
+		this.state = LoadingState.LOADING
+
+		try {
+			const classJobs = yield getClassJobs()
+			this.state = LoadingState.COMPLETE
+			this.classJobs = classJobs
+		} catch {
+			// TODO: proper error handling
+			this.state = LoadingState.WAITING
+		}
+	})
 }

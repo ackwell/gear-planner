@@ -13,6 +13,7 @@
     "types": "tsc --noEmit"
   },
   "dependencies": {
+    "ky": "^0.11.1",
     "mobx": "^5.10.1",
     "mobx-react-lite": "^1.4.0",
     "react": "^16.8.6",
