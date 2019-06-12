@@ -11,8 +11,7 @@ export class ClassJobStore {
 	@observable.ref state: LoadingState = LoadingState.WAITING
 	@observable.ref classJobs: ClassJob[] = []
 
-	@computed
-	get categories(): readonly ClassJobCategory[] {
+	@computed get categories(): readonly ClassJobCategory[] {
 		const catMap = this.classJobs.reduce(
 			(map, cj) => map.set(cj.category.id, cj.category),
 			new Map<number, ClassJobCategory>(),
@@ -38,3 +37,5 @@ export class ClassJobStore {
 		}
 	})
 }
+
+export const classJobStore = new ClassJobStore()
