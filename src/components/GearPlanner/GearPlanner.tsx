@@ -11,6 +11,8 @@ export const GearPlanner = observer(() => {
 		gearPlannerStore.setClassJob(cj)
 	}
 
+	const theLetterVSixTimes = Array(6).fill('V') as 'V'[]
+
 	return (
 		<>
 			<h2>
@@ -22,12 +24,20 @@ export const GearPlanner = observer(() => {
 				<thead>
 					<tr>
 						<th>Name</th>
+						{theLetterVSixTimes.map((v, index) => (
+							<th>{index}</th>
+						))}
 					</tr>
 				</thead>
 				<tbody>
 					{gearPlannerStore.equipment.map(e => (
 						<tr>
 							<td>{e.name}</td>
+							{theLetterVSixTimes.map((v, index) => {
+								const foo = e.stats[index]
+								const amount = foo ? foo.amount : 0
+								return <td>{amount}</td>
+							})}
 						</tr>
 					))}
 				</tbody>
