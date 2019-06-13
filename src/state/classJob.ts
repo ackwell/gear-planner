@@ -1,15 +1,13 @@
-import {observable, flow, computed} from 'mobx'
-import {ClassJob, getClassJobs, ClassJobCategory} from '../api'
-
-export enum LoadingState {
-	WAITING,
-	LOADING,
-	COMPLETE,
-}
+import {observable, computed, action} from 'mobx'
+import {getClassJobs, ClassJobCategory} from '../api'
+import {Request, LoadingState} from './request'
 
 export class ClassJobStore {
-	@observable.ref state: LoadingState = LoadingState.WAITING
-	@observable.ref classJobs: ClassJob[] = []
+	@observable request = new Request({query: getClassJobs})
+
+	@computed get classJobs() {
+		return this.request.response || []
+	}
 
 	@computed get categories(): readonly ClassJobCategory[] {
 		const catMap = this.classJobs.reduce(
@@ -19,23 +17,14 @@ export class ClassJobStore {
 		return Array.from(catMap.values())
 	}
 
-	ensure = flow(function*(this: ClassJobStore) {
+	load() {
 		// Only need to load classjobs once
-		if (this.state !== LoadingState.WAITING) {
+		if (this.request.state !== LoadingState.WAITING) {
 			return
 		}
 
-		this.state = LoadingState.LOADING
-
-		try {
-			const classJobs = yield getClassJobs()
-			this.state = LoadingState.COMPLETE
-			this.classJobs = classJobs
-		} catch {
-			// TODO: proper error handling
-			this.state = LoadingState.WAITING
-		}
-	})
+		this.request.execute()
+	}
 }
 
 export const classJobStore = new ClassJobStore()

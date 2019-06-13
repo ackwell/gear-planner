@@ -1,7 +1,8 @@
-import {LoadingState, GlobalStoreContext} from '../../state'
+import {GlobalStoreContext} from '../../state'
 import React from 'react'
 import {observer} from 'mobx-react-lite'
 import {ClassJob} from '../../api'
+import {LoadingState} from '../../state/request'
 
 interface Props {
 	onSelect?: (classJob: ClassJob) => void
@@ -9,7 +10,7 @@ interface Props {
 
 export const ClassJobFilter = observer((props: Props) => {
 	const {classJobStore} = React.useContext(GlobalStoreContext)
-	classJobStore.ensure()
+	classJobStore.load()
 
 	const onSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
 		const {onSelect} = props
@@ -24,7 +25,7 @@ export const ClassJobFilter = observer((props: Props) => {
 	// TODO: break this up a bit?
 	return (
 		<>
-			{LoadingState[classJobStore.state]}
+			{LoadingState[classJobStore.request.state]}
 			<select onChange={onSelect}>
 				{classJobStore.categories.map(cat => (
 					<optgroup key={cat.id} label={cat.name}>
