@@ -17,6 +17,10 @@ export const GearPlanner = observer(() => {
 				gear planner ({gearPlannerStore.classJob && gearPlannerStore.classJob.abbr})
 			</h2>
 			<ClassJobFilter onSelect={onSelect} />
+			<hr />
+			{gearPlannerStore.equipment.map(e => (
+				<div>{e.name}</div>
+			))}
 		</>
 	)
 })

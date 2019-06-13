@@ -23,6 +23,7 @@ export class Request<F extends QueryFunction> {
 	}
 
 	execute = flow(function*(this: Request<F>, ...params: Parameters<F>) {
+		// TODO: this should probably cancel, not noop
 		if (this.state === LoadingState.LOADING) {
 			return
 		}
