@@ -1,7 +1,7 @@
 import {GlobalStoreContext} from '../../state'
 import React from 'react'
 import {observer} from 'mobx-react-lite'
-import {ClassJob} from '../../api'
+import {ClassJob} from '../../api/classJob'
 import {LoadingState} from '../../state/request'
 
 interface Props {

@@ -1,5 +1,5 @@
-import {observable, computed, action} from 'mobx'
-import {getClassJobs, ClassJobCategory} from '../api'
+import {observable, computed} from 'mobx'
+import {getClassJobs, ClassJobCategory} from '../api/classJob'
 import {Request, LoadingState} from './request'
 
 export class ClassJobStore {

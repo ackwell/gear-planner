@@ -16,6 +16,8 @@ const mapEquipment = (resp: ItemResponse): Equipment => ({
 	name: resp.Name,
 })
 
+const columns = ['ID', 'Name'].join(',')
+
 // TODO: Write a generalised search handler
 export const findEquipment = (opts: {
 	classJob: ClassJob
@@ -24,7 +26,7 @@ export const findEquipment = (opts: {
 		.post('search', {
 			json: {
 				indexes: 'item',
-				columns: 'ID,Name',
+				columns,
 				body: {
 					query: {
 						bool: {

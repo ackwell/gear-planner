@@ -1,7 +1,7 @@
 import React from 'react'
 import {GlobalStoreContext} from '../../state'
 import {observer} from 'mobx-react-lite'
-import {ClassJob} from '../../api'
+import {ClassJob} from '../../api/classJob'
 import {ClassJobFilter} from './ClassJobFilter'
 
 export const GearPlanner = observer(() => {
@@ -18,9 +18,20 @@ export const GearPlanner = observer(() => {
 			</h2>
 			<ClassJobFilter onSelect={onSelect} />
 			<hr />
-			{gearPlannerStore.equipment.map(e => (
-				<div>{e.name}</div>
-			))}
+			<table>
+				<thead>
+					<tr>
+						<th>Name</th>
+					</tr>
+				</thead>
+				<tbody>
+					{gearPlannerStore.equipment.map(e => (
+						<tr>
+							<td>{e.name}</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
 		</>
 	)
 })

@@ -1,5 +1,5 @@
 import {observable, action, reaction, computed} from 'mobx'
-import {ClassJob} from '../api'
+import {ClassJob} from '../api/classJob'
 import {Request} from './request'
 import {findEquipment} from '../api/equipment'
 
