@@ -1,7 +1,7 @@
 import {observable, action, reaction, computed} from 'mobx'
-import {ClassJob} from '../../api/classJob'
-import {RequestModel} from '../models/request'
-import {findEquipment} from '../../api/equipment'
+import {ClassJob} from 'api/classJob'
+import {RequestModel} from 'state/models/request'
+import {findEquipment} from 'api/equipment'
 
 export class GearPlannerStore {
 	@observable.ref classJob?: ClassJob

@@ -30,6 +30,13 @@ module.exports = {
 			}
 		}),
 
+		// Root path module resolution
+		neutrino => {
+			const {modules} = neutrino.config.resolve
+			modules.add('node_modules')
+			modules.add('src')
+		},
+
 		// Typescript file extensions
 		neutrino => {
 			neutrino.config.resolve.extensions.add('.ts')

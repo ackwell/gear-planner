@@ -1,7 +1,7 @@
 import React from 'react'
-import {GlobalStoreContext} from '../../state/stores'
+import {GlobalStoreContext} from 'state/stores'
 import {observer} from 'mobx-react-lite'
-import {ClassJob} from '../../api/classJob'
+import {ClassJob} from 'api/classJob'
 import {ClassJobFilter} from './ClassJobFilter'
 
 export const GearPlanner = observer(() => {

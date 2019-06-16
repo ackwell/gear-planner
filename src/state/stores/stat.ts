@@ -1,6 +1,6 @@
 import {observable, computed} from 'mobx'
-import {getStats} from '../../api/stat'
-import {RequestModel, LoadingState} from '../models/request'
+import {getStats} from 'api/stat'
+import {RequestModel, LoadingState} from 'state/models/request'
 
 export class StatStore {
 	@observable request = new RequestModel({query: getStats})

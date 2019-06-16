@@ -1,8 +1,8 @@
-import {GlobalStoreContext} from '../../state/stores'
+import {GlobalStoreContext} from 'state/stores'
 import React from 'react'
 import {observer} from 'mobx-react-lite'
-import {ClassJob} from '../../api/classJob'
-import {LoadingState} from '../../state/models/request'
+import {ClassJob} from 'api/classJob'
+import {LoadingState} from 'state/models/request'
 
 interface Props {
 	onSelect?: (classJob: ClassJob) => void

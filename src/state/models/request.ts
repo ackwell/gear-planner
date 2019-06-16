@@ -1,7 +1,5 @@
 import {observable, flow} from 'mobx'
 
-// TODO: This should probs be in /models or some shit idk
-
 export enum LoadingState {
 	WAITING,
 	LOADING,
