@@ -38,13 +38,24 @@ export class GearPlannerStore {
 			classJob => classJob && this.equipReq.execute({classJob}),
 		)
 
-		// When the raw equipment is changed, re-build our planner repr
+		// When the raw equipment is changed, re-build our planner repr and kick off
+		// a req for new item level data
+		// TODO: Worth caching ilv?
 		reaction(
 			() => this.equipReq.response,
-			equips => {
-				this.equipment = equips
-					? equips.map(equipment => new PlannerEquipmentModel({equipment}))
-					: []
+			(equips = []) => {
+				// Build new equipment repr
+				this.equipment = equips.map(
+					equipment => new PlannerEquipmentModel({equipment}),
+				)
+
+				// Find the set of ilvs for the new equip set
+				const ilvs = Array.from(
+					equips.reduce((acc, cur) => acc.add(cur.itemLevel), new Set<number>()),
+				)
+
+				// TODO: fire request
+				console.log(ilvs)
 			},
 		)
 	}

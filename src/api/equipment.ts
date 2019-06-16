@@ -10,6 +10,7 @@ interface StatAmount {
 export interface Equipment {
 	id: number
 	name: string
+	itemLevel: number
 	stats: StatAmount[]
 	statHqModifiers: StatAmount[]
 }
@@ -17,6 +18,7 @@ export interface Equipment {
 interface ItemResponse {
 	ID: number
 	Name: string
+	LevelItem: number
 	BaseParam0TargetID: number
 	BaseParam1TargetID: number
 	BaseParam2TargetID: number
@@ -46,6 +48,7 @@ interface ItemResponse {
 const columns = [
 	'ID',
 	'Name',
+	'LevelItem',
 
 	// SAVE ME
 	'BaseParam0TargetID',
@@ -77,6 +80,7 @@ const columns = [
 const mapEquipment = (resp: ItemResponse): Equipment => ({
 	id: resp.ID,
 	name: resp.Name,
+	itemLevel: resp.LevelItem,
 	stats: [
 		{id: resp.BaseParam0TargetID, amount: resp.BaseParamValue0},
 		{id: resp.BaseParam1TargetID, amount: resp.BaseParamValue1},
