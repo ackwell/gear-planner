@@ -31,8 +31,6 @@ export class GearPlannerStore {
 
 	constructor(opts: {statStore: StatStore}) {
 		this.statStore = opts.statStore
-		// TODO: I really need to re-think the .load calls
-		this.statStore.load()
 
 		// Re-request the core list of equipment when filters are changed
 		reaction(

@@ -10,7 +10,6 @@ interface Props {
 
 export const ClassJobFilter = observer((props: Props) => {
 	const {classJobStore} = React.useContext(GlobalStoreContext)
-	classJobStore.load()
 
 	const onSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
 		const {onSelect} = props

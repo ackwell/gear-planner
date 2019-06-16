@@ -28,3 +28,4 @@ export class ClassJobStore {
 }
 
 export const classJobStore = new ClassJobStore()
+classJobStore.load()

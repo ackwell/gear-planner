@@ -20,3 +20,4 @@ export class StatStore {
 }
 
 export const statStore = new StatStore()
+statStore.load()
