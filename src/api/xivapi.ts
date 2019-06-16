@@ -1,4 +1,5 @@
 import ky from 'ky'
+import {Bodybuilder} from 'bodybuilder'
 
 export interface XivapiPagination {
 	Page: number
@@ -18,3 +19,16 @@ export interface XivapiListingResponse<T extends object> {
 export const xivapi = ky.create({
 	prefixUrl: 'https://xivapi.com/',
 })
+
+export const xivapiSearch = (opts: {
+	indexes: string[]
+	columns: string[]
+	query: Bodybuilder
+}) =>
+	xivapi.post('search', {
+		json: {
+			indexes: opts.indexes.join(','),
+			columns: opts.columns.join(','),
+			body: opts.query.build(),
+		},
+	})

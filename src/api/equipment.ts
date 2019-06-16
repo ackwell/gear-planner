@@ -1,4 +1,5 @@
-import {xivapi, XivapiListingResponse} from './xivapi'
+import bodybuilder from 'bodybuilder'
+import {XivapiListingResponse, xivapiSearch} from './xivapi'
 import {ClassJob} from './classJob'
 
 // TODO: This should probably be re-visited and put somewhere else
@@ -75,7 +76,7 @@ const columns = [
 	'BaseParamValueSpecial3',
 	'BaseParamValueSpecial4',
 	'BaseParamValueSpecial5',
-].join(',')
+] //.join(',')
 
 const mapEquipment = (resp: ItemResponse): Equipment => ({
 	id: resp.ID,
@@ -99,25 +100,15 @@ const mapEquipment = (resp: ItemResponse): Equipment => ({
 	].filter(stat => stat.id !== 0),
 })
 
-// TODO: Write a generalised search handler
 export const findEquipment = (opts: {
 	classJob: ClassJob
 }): Promise<Equipment[]> =>
-	xivapi
-		.post('search', {
-			json: {
-				indexes: 'item',
-				columns,
-				body: {
-					query: {
-						bool: {
-							// Relying on <<magic>> for that CJC filter
-							filter: [{term: {[`ClassJobCategory.${opts.classJob.abbr}`]: 1}}],
-						},
-					},
-					sort: [{LevelItem: 'desc'}],
-				},
-			},
-		})
+	xivapiSearch({
+		indexes: ['item'],
+		columns,
+		query: bodybuilder()
+			.query('term', `ClassJobCategory.${opts.classJob.abbr}`, 1)
+			.sort('LevelItem', 'desc'),
+	})
 		.json<XivapiListingResponse<ItemResponse>>()
 		.then(resp => resp.Results.map(mapEquipment))
