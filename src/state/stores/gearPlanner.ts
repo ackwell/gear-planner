@@ -10,6 +10,16 @@ export class GearPlannerStore {
 
 	@observable private equipReq = new RequestModel({query: findEquipment})
 
+	@computed get visibleStats() {
+		// TODO: this, but better
+		return Array.from(
+			this.equipment.reduce((acc, cur) => {
+				cur.stats.forEach(stat => acc.add(stat.id))
+				return acc
+			}, new Set<number>()),
+		)
+	}
+
 	constructor() {
 		// Re-request the core list of equipment when filters are changed
 		reaction(
