@@ -22,19 +22,19 @@ export const GearPlanner = observer(() => {
 				<thead>
 					<tr>
 						<th>Name</th>
-						{gearPlannerStore.visibleStats.map(statId => (
-							<th key={statId}>{statId}</th>
+						{gearPlannerStore.visibleStats.map(stat => (
+							<th key={stat.id}>{stat.name}</th>
 						))}
 					</tr>
 				</thead>
 				<tbody>
 					{gearPlannerStore.equipment.map(e => (
-						<tr>
+						<tr key={e.id}>
 							<td>{e.name}</td>
-							{gearPlannerStore.visibleStats.map(statId => {
-								const stat = e.stats.find(s => s.id === statId)
-								const amount = stat ? stat.amount : '-'
-								return <td key={statId}>{amount}</td>
+							{gearPlannerStore.visibleStats.map(stat => {
+								const gearStat = e.stats.find(s => s.id === stat.id)
+								const amount = gearStat ? gearStat.amount : '-'
+								return <td key={stat.id}>{amount}</td>
 							})}
 						</tr>
 					))}

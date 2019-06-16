@@ -3,6 +3,10 @@ import {Equipment} from 'api/equipment'
 export class PlannerEquipmentModel {
 	private baseEquip: Equipment
 
+	get id() {
+		return this.baseEquip.id
+	}
+
 	get name() {
 		return this.baseEquip.name
 	}
