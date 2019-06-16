@@ -1,7 +1,7 @@
 import React from 'react'
 import {App} from './components/App'
 import {BrowserRouter as Router} from 'react-router-dom'
-import {GlobalStoreProvider} from './state'
+import {GlobalStoreProvider} from './state/stores'
 
 export const Root = () => (
 	<GlobalStoreProvider>

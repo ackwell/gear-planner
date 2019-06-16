@@ -1,9 +1,9 @@
 import {observable, computed} from 'mobx'
-import {getClassJobs, ClassJobCategory} from '../api/classJob'
-import {Request, LoadingState} from './request'
+import {getClassJobs, ClassJobCategory} from '../../api/classJob'
+import {RequestModel, LoadingState} from '../models/request'
 
 export class ClassJobStore {
-	@observable request = new Request({query: getClassJobs})
+	@observable request = new RequestModel({query: getClassJobs})
 
 	@computed get classJobs() {
 		return this.request.response || []

@@ -12,7 +12,7 @@ export enum LoadingState {
 type QueryFunction = (...params: any[]) => any
 type UnwrapPromise<T> = T extends Promise<infer U> ? U : T
 
-export class Request<F extends QueryFunction> {
+export class RequestModel<F extends QueryFunction> {
 	@observable.ref state: LoadingState = LoadingState.WAITING
 	@observable.ref response?: UnwrapPromise<ReturnType<F>>
 
@@ -22,7 +22,7 @@ export class Request<F extends QueryFunction> {
 		this.query = opts.query
 	}
 
-	execute = flow(function*(this: Request<F>, ...params: Parameters<F>) {
+	execute = flow(function*(this: RequestModel<F>, ...params: Parameters<F>) {
 		// TODO: this should probably cancel, not noop
 		if (this.state === LoadingState.LOADING) {
 			return

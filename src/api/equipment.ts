@@ -2,7 +2,7 @@ import {xivapi, XivapiListingResponse} from './xivapi'
 import {ClassJob} from './classJob'
 
 // TODO: This should probably be re-visited and put somewhere else
-interface Stat {
+interface StatAmount {
 	id: number
 	amount: number
 }
@@ -10,8 +10,8 @@ interface Stat {
 export interface Equipment {
 	id: number
 	name: string
-	stats: Stat[]
-	statHqModifiers: Stat[]
+	stats: StatAmount[]
+	statHqModifiers: StatAmount[]
 }
 
 interface ItemResponse {
