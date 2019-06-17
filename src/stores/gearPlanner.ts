@@ -1,7 +1,6 @@
 import {observable, action, reaction, computed} from 'mobx'
 import {RequestModel} from 'models/request'
 import {findEquipment} from 'api/equipment'
-import {PlannerEquipmentModel} from 'models/plannerEquipment'
 import {StatStore, statStore} from './stat'
 import {isDefined} from 'utils'
 import {ClassJobModel} from 'models/classJob'
@@ -9,7 +8,7 @@ import {EquipmentModel} from 'models/equipment'
 
 export class GearPlannerStore {
 	@observable.ref classJob?: ClassJobModel
-	@observable equipment: PlannerEquipmentModel[] = []
+	@observable equipment: EquipmentModel[] = []
 
 	private statStore: StatStore
 	private equipReq = new RequestModel({query: findEquipment})
@@ -47,10 +46,7 @@ export class GearPlannerStore {
 			() => this.equipReq.response,
 			(equips = []) => {
 				// Build new equipment repr
-				this.equipment = equips.map(
-					resp =>
-						new PlannerEquipmentModel({equipment: EquipmentModel.fromResponse(resp)}),
-				)
+				this.equipment = equips.map(EquipmentModel.fromResponse)
 
 				// Find the set of ilvs for the new equip set
 				const ilvs = Array.from(
