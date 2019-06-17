@@ -1,12 +1,7 @@
-import {configure} from 'mobx'
 import React from 'react'
 import {classJobStore} from './classJob'
 import {gearPlannerStore} from './gearPlanner'
 import {statStore} from './stat'
-
-configure({
-	enforceActions: 'observed',
-})
 
 const stores = {
 	classJobStore,

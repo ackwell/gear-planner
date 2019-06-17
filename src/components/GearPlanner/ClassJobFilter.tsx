@@ -1,4 +1,4 @@
-import {GlobalStoreContext} from 'stores'
+import {GlobalStoreContext} from 'stores/context'
 import React from 'react'
 import {observer} from 'mobx-react-lite'
 import {ClassJob} from 'api/classJob'

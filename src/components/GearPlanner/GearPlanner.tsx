@@ -1,5 +1,5 @@
 import React from 'react'
-import {GlobalStoreContext} from 'stores'
+import {GlobalStoreContext} from 'stores/context'
 import {observer} from 'mobx-react-lite'
 import {ClassJob} from 'api/classJob'
 import {ClassJobFilter} from './ClassJobFilter'
