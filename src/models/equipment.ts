@@ -1,17 +1,19 @@
 import {StatAmount} from './stat'
 import {EquipmentResponse} from 'api/equipment'
 import {createTransformer} from 'mobx-utils'
-import {observable, action} from 'mobx'
+import {observable, action, computed} from 'mobx'
 import {MateriaModel} from './materia'
+import {isDefined} from 'utils'
 
 type PossibleMateria = MateriaModel | undefined
+type Adjuster = (stats: StatAmount[]) => StatAmount[]
 
 export class EquipmentModel {
 	id: number
 	name: string
 	itemLevel: number
 	materiaSlots: number
-	stats: StatAmount[]
+	baseStats: StatAmount[]
 	statHqModifiers: StatAmount[]
 
 	@observable materia: PossibleMateria[] = [
@@ -22,19 +24,37 @@ export class EquipmentModel {
 		undefined,
 	]
 
+	@computed private get adjusters(): Adjuster[] {
+		const materiaAdjusters = this.materia
+			.filter(isDefined)
+			.map(materia => (stats: StatAmount[]) =>
+				this.adjustStatsWithMateria(stats, materia),
+			)
+
+		return [
+			// TODO: HQ modifiers
+			...materiaAdjusters,
+			// TODO: Stat caps
+		]
+	}
+
+	@computed get stats() {
+		return this.adjusters.reduce((stats, adj) => adj(stats), this.baseStats)
+	}
+
 	constructor(opts: {
 		id: number
 		name: string
 		itemLevel: number
 		materiaSlots: number
-		stats: StatAmount[]
+		baseStats: StatAmount[]
 		statHqModifiers: StatAmount[]
 	}) {
 		this.id = opts.id
 		this.name = opts.name
 		this.itemLevel = opts.itemLevel
 		this.materiaSlots = opts.materiaSlots
-		this.stats = opts.stats
+		this.baseStats = opts.baseStats
 		this.statHqModifiers = opts.statHqModifiers
 	}
 
@@ -44,6 +64,22 @@ export class EquipmentModel {
 		console.log(this.materia)
 	}
 
+	private adjustStatsWithMateria(stats: StatAmount[], materia: MateriaModel) {
+		const newStats = stats.slice()
+
+		const index = newStats.findIndex(stat => stat.id === materia.stat.id)
+		if (index !== -1) {
+			newStats.splice(index, 1, {
+				...materia.stat,
+				amount: newStats[index].amount + materia.stat.amount,
+			})
+		} else {
+			newStats.push({...materia.stat})
+		}
+
+		return newStats
+	}
+
 	static fromResponse = createTransformer(
 		(resp: EquipmentResponse) =>
 			new EquipmentModel({
@@ -51,7 +87,7 @@ export class EquipmentModel {
 				name: resp.Name,
 				itemLevel: resp.LevelItem,
 				materiaSlots: resp.MateriaSlotCount,
-				stats: [
+				baseStats: [
 					{id: resp.BaseParam0TargetID, amount: resp.BaseParamValue0},
 					{id: resp.BaseParam1TargetID, amount: resp.BaseParamValue1},
 					{id: resp.BaseParam2TargetID, amount: resp.BaseParamValue2},
