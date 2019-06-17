@@ -16,7 +16,7 @@ export interface Equipment {
 	statHqModifiers: StatAmount[]
 }
 
-interface ItemResponse {
+interface EquipmentResponse {
 	ID: number
 	Name: string
 	LevelItem: number
@@ -76,9 +76,9 @@ const columns = [
 	'BaseParamValueSpecial3',
 	'BaseParamValueSpecial4',
 	'BaseParamValueSpecial5',
-] //.join(',')
+]
 
-const mapEquipment = (resp: ItemResponse): Equipment => ({
+const mapEquipment = (resp: EquipmentResponse): Equipment => ({
 	id: resp.ID,
 	name: resp.Name,
 	itemLevel: resp.LevelItem,
@@ -110,5 +110,5 @@ export const findEquipment = (opts: {
 			.query('term', `ClassJobCategory.${opts.classJob.abbr}`, 1)
 			.sort('LevelItem', 'desc'),
 	})
-		.json<XivapiListingResponse<ItemResponse>>()
+		.json<XivapiListingResponse<EquipmentResponse>>()
 		.then(resp => resp.Results.map(mapEquipment))
