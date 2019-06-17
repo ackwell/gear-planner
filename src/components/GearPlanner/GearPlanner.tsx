@@ -1,20 +1,21 @@
 import React from 'react'
 import {GlobalStoreContext} from 'stores/context'
 import {observer} from 'mobx-react-lite'
-import {ClassJob} from 'api/classJob'
 import {ClassJobFilter} from './ClassJobFilter'
+import {ClassJobModel} from 'models/classJob'
 
 export const GearPlanner = observer(() => {
 	const {gearPlannerStore} = React.useContext(GlobalStoreContext)
 
-	const onSelect = (cj: ClassJob) => {
+	const onSelect = (cj: ClassJobModel) => {
 		gearPlannerStore.setClassJob(cj)
 	}
 
 	return (
 		<>
 			<h2>
-				gear planner ({gearPlannerStore.classJob && gearPlannerStore.classJob.abbr})
+				gear planner (
+				{gearPlannerStore.classJob && gearPlannerStore.classJob.abbreviation})
 			</h2>
 			<ClassJobFilter onSelect={onSelect} />
 			<hr />

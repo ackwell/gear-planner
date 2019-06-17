@@ -1,6 +1,5 @@
 import bodybuilder from 'bodybuilder'
 import {XivapiListingResponse, xivapiSearch} from './xivapi'
-import {ClassJob} from './classJob'
 
 // TODO: This should probably be re-visited and put somewhere else
 interface StatAmount {
@@ -101,13 +100,13 @@ const mapEquipment = (resp: EquipmentResponse): Equipment => ({
 })
 
 export const findEquipment = (opts: {
-	classJob: ClassJob
+	abbreviation: string
 }): Promise<Equipment[]> =>
 	xivapiSearch({
 		indexes: ['item'],
 		columns,
 		query: bodybuilder()
-			.query('term', `ClassJobCategory.${opts.classJob.abbr}`, 1)
+			.query('term', `ClassJobCategory.${opts.abbreviation}`, 1)
 			.sort('LevelItem', 'desc'),
 	})
 		.json<XivapiListingResponse<EquipmentResponse>>()

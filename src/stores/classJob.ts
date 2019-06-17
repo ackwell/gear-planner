@@ -1,12 +1,13 @@
 import {observable, computed} from 'mobx'
-import {getClassJobs, ClassJobCategory} from 'api/classJob'
+import {getClassJobs} from 'api/classJob'
 import {RequestModel, LoadingState} from 'models/request'
+import {ClassJobModel, ClassJobCategory} from 'models/classJob'
 
 export class ClassJobStore {
 	@observable request = new RequestModel({query: getClassJobs})
 
 	@computed get classJobs() {
-		return this.request.response || []
+		return (this.request.response || []).map(ClassJobModel.fromResponse)
 	}
 
 	@computed get categories(): readonly ClassJobCategory[] {

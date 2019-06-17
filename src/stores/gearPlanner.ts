@@ -1,13 +1,13 @@
 import {observable, action, reaction, computed} from 'mobx'
-import {ClassJob} from 'api/classJob'
 import {RequestModel} from 'models/request'
 import {findEquipment} from 'api/equipment'
 import {PlannerEquipmentModel} from 'models/plannerEquipment'
 import {StatStore, statStore} from './stat'
 import {isDefined} from 'utils'
+import {ClassJobModel} from 'models/classJob'
 
 export class GearPlannerStore {
-	@observable.ref classJob?: ClassJob
+	@observable.ref classJob?: ClassJobModel
 	@observable equipment: PlannerEquipmentModel[] = []
 
 	private statStore: StatStore
@@ -35,7 +35,8 @@ export class GearPlannerStore {
 		// Re-request the core list of equipment when filters are changed
 		reaction(
 			() => this.classJob,
-			classJob => classJob && this.equipReq.execute({classJob}),
+			classJob =>
+				classJob && this.equipReq.execute({abbreviation: classJob.abbreviation}),
 		)
 
 		// When the raw equipment is changed, re-build our planner repr and kick off
@@ -60,7 +61,7 @@ export class GearPlannerStore {
 		)
 	}
 
-	@action setClassJob(classJob: ClassJob) {
+	@action setClassJob(classJob: ClassJobModel) {
 		this.classJob = classJob
 	}
 }

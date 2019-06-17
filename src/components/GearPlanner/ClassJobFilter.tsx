@@ -1,11 +1,11 @@
 import {GlobalStoreContext} from 'stores/context'
 import React from 'react'
 import {observer} from 'mobx-react-lite'
-import {ClassJob} from 'api/classJob'
 import {LoadingState} from 'models/request'
+import {ClassJobModel} from 'models/classJob'
 
 interface Props {
-	onSelect?: (classJob: ClassJob) => void
+	onSelect?: (classJob: ClassJobModel) => void
 }
 
 export const ClassJobFilter = observer((props: Props) => {
