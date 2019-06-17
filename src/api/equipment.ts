@@ -5,6 +5,8 @@ export interface EquipmentResponse {
 	ID: number
 	Name: string
 	LevelItem: number
+	MateriaSlotCount: number
+
 	BaseParam0TargetID: number
 	BaseParam1TargetID: number
 	BaseParam2TargetID: number
@@ -35,6 +37,7 @@ const columns = [
 	'ID',
 	'Name',
 	'LevelItem',
+	'MateriaSlotCount',
 
 	// SAVE ME
 	'BaseParam0TargetID',

@@ -28,6 +28,7 @@ export const GearPlanner = observer(() => {
 				<thead>
 					<tr>
 						<th>Name</th>
+						<th>Materia</th>
 						{gearPlannerStore.visibleStats.map(stat => (
 							<th key={stat.id}>{stat.name}</th>
 						))}
@@ -37,9 +38,15 @@ export const GearPlanner = observer(() => {
 					{/* TODO: make this a component lel */}
 					{gearPlannerStore.equipment.map(e => {
 						const onClick = () => onClickEquipment(e)
+						const shittyMateriaArray = [...Array(e.materiaSlots).keys()]
 						return (
 							<tr key={e.id} onClick={onClick}>
 								<td>{e.name}</td>
+								<td>
+									{shittyMateriaArray.map(() => (
+										<>[ ]</>
+									))}
+								</td>
 								{gearPlannerStore.visibleStats.map(stat => {
 									const gearStat = e.stats.find(s => s.id === stat.id)
 									const amount = gearStat ? gearStat.amount : '-'

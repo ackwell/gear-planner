@@ -6,6 +6,7 @@ export class EquipmentModel {
 	id: number
 	name: string
 	itemLevel: number
+	materiaSlots: number
 	stats: StatAmount[]
 	statHqModifiers: StatAmount[]
 
@@ -13,12 +14,14 @@ export class EquipmentModel {
 		id: number
 		name: string
 		itemLevel: number
+		materiaSlots: number
 		stats: StatAmount[]
 		statHqModifiers: StatAmount[]
 	}) {
 		this.id = opts.id
 		this.name = opts.name
 		this.itemLevel = opts.itemLevel
+		this.materiaSlots = opts.materiaSlots
 		this.stats = opts.stats
 		this.statHqModifiers = opts.statHqModifiers
 	}
@@ -29,6 +32,7 @@ export class EquipmentModel {
 				id: resp.ID,
 				name: resp.Name,
 				itemLevel: resp.LevelItem,
+				materiaSlots: resp.MateriaSlotCount,
 				stats: [
 					{id: resp.BaseParam0TargetID, amount: resp.BaseParamValue0},
 					{id: resp.BaseParam1TargetID, amount: resp.BaseParamValue1},
