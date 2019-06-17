@@ -5,6 +5,7 @@ import {PlannerEquipmentModel} from 'models/plannerEquipment'
 import {StatStore, statStore} from './stat'
 import {isDefined} from 'utils'
 import {ClassJobModel} from 'models/classJob'
+import {EquipmentModel} from 'models/equipment'
 
 export class GearPlannerStore {
 	@observable.ref classJob?: ClassJobModel
@@ -47,12 +48,16 @@ export class GearPlannerStore {
 			(equips = []) => {
 				// Build new equipment repr
 				this.equipment = equips.map(
-					equipment => new PlannerEquipmentModel({equipment}),
+					resp =>
+						new PlannerEquipmentModel({equipment: EquipmentModel.fromResponse(resp)}),
 				)
 
 				// Find the set of ilvs for the new equip set
 				const ilvs = Array.from(
-					equips.reduce((acc, cur) => acc.add(cur.itemLevel), new Set<number>()),
+					this.equipment.reduce(
+						(acc, cur) => acc.add(cur.itemLevel),
+						new Set<number>(),
+					),
 				)
 
 				// TODO: fire request

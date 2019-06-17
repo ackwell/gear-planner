@@ -1,5 +1,10 @@
 import {StatResponse} from 'api/stat'
 
+export interface StatAmount {
+	id: StatModel['id']
+	amount: number
+}
+
 export class StatModel {
 	id: number
 	name: string

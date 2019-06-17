@@ -1,7 +1,7 @@
-import {Equipment} from 'api/equipment'
+import {EquipmentModel} from './equipment'
 
 export class PlannerEquipmentModel {
-	private baseEquip: Equipment
+	private baseEquip: EquipmentModel
 
 	get id() {
 		return this.baseEquip.id
@@ -11,11 +11,15 @@ export class PlannerEquipmentModel {
 		return this.baseEquip.name
 	}
 
+	get itemLevel() {
+		return this.baseEquip.itemLevel
+	}
+
 	get stats() {
 		return this.baseEquip.stats
 	}
 
-	constructor(opts: {equipment: Equipment}) {
+	constructor(opts: {equipment: EquipmentModel}) {
 		this.baseEquip = opts.equipment
 	}
 }
