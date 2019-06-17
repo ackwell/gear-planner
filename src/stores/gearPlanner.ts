@@ -8,10 +8,13 @@ import {EquipmentModel} from 'models/equipment'
 
 export class GearPlannerStore {
 	@observable.ref classJob?: ClassJobModel
-	@observable equipment: EquipmentModel[] = []
 
 	private statStore: StatStore
 	private equipReq = new RequestModel({query: findEquipment})
+
+	@computed get equipment() {
+		return (this.equipReq.response || []).map(EquipmentModel.fromResponse)
+	}
 
 	@computed get visibleStats() {
 		// TODO: this, but better
@@ -29,6 +32,17 @@ export class GearPlannerStore {
 			.sort((a, b) => a.order! - b.order!)
 	}
 
+	// TODO: use this
+	@computed private get itemLevels() {
+		// Find the set of ilvs for the new equip set
+		return Array.from(
+			this.equipment.reduce(
+				(acc, cur) => acc.add(cur.itemLevel),
+				new Set<number>(),
+			),
+		)
+	}
+
 	constructor(opts: {statStore: StatStore}) {
 		this.statStore = opts.statStore
 
@@ -37,28 +51,6 @@ export class GearPlannerStore {
 			() => this.classJob,
 			classJob =>
 				classJob && this.equipReq.execute({abbreviation: classJob.abbreviation}),
-		)
-
-		// When the raw equipment is changed, re-build our planner repr and kick off
-		// a req for new item level data
-		// TODO: Worth caching ilv?
-		reaction(
-			() => this.equipReq.response,
-			(equips = []) => {
-				// Build new equipment repr
-				this.equipment = equips.map(EquipmentModel.fromResponse)
-
-				// Find the set of ilvs for the new equip set
-				const ilvs = Array.from(
-					this.equipment.reduce(
-						(acc, cur) => acc.add(cur.itemLevel),
-						new Set<number>(),
-					),
-				)
-
-				// TODO: fire request
-				console.log(ilvs)
-			},
 		)
 	}
 
