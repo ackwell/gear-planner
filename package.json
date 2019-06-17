@@ -17,6 +17,7 @@
     "ky": "^0.11.1",
     "mobx": "^5.10.1",
     "mobx-react-lite": "^1.4.0",
+    "mobx-utils": "^5.4.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1"
