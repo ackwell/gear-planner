@@ -1,8 +1,8 @@
 import {observable, action, reaction, computed} from 'mobx'
 import {ClassJob} from 'api/classJob'
-import {RequestModel} from 'state/models/request'
+import {RequestModel} from 'models/request'
 import {findEquipment} from 'api/equipment'
-import {PlannerEquipmentModel} from 'state/models/plannerEquipment'
+import {PlannerEquipmentModel} from 'models/plannerEquipment'
 import {StatStore, statStore} from './stat'
 import {isDefined} from 'utils'
 
