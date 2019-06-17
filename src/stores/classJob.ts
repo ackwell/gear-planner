@@ -4,7 +4,7 @@ import {RequestModel, LoadingState} from 'models/request'
 import {ClassJobModel, ClassJobCategory} from 'models/classJob'
 
 export class ClassJobStore {
-	@observable request = new RequestModel({query: getClassJobs})
+	@observable private request = new RequestModel({query: getClassJobs})
 
 	@computed get classJobs() {
 		return (this.request.response || []).map(ClassJobModel.fromResponse)

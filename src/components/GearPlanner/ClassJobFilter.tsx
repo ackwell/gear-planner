@@ -1,7 +1,6 @@
 import {GlobalStoreContext} from 'stores/context'
 import React from 'react'
 import {observer} from 'mobx-react-lite'
-import {LoadingState} from 'models/request'
 import {ClassJobModel} from 'models/classJob'
 
 interface Props {
@@ -23,21 +22,18 @@ export const ClassJobFilter = observer((props: Props) => {
 
 	// TODO: break this up a bit?
 	return (
-		<>
-			{LoadingState[classJobStore.request.state]}
-			<select onChange={onSelect}>
-				{classJobStore.categories.map(cat => (
-					<optgroup key={cat.id} label={cat.name}>
-						{classJobStore.classJobs
-							.filter(cj => cj.category.id === cat.id)
-							.map(cj => (
-								<option key={cj.id} value={cj.id}>
-									{cj.name}
-								</option>
-							))}
-					</optgroup>
-				))}
-			</select>
-		</>
+		<select onChange={onSelect}>
+			{classJobStore.categories.map(cat => (
+				<optgroup key={cat.id} label={cat.name}>
+					{classJobStore.classJobs
+						.filter(cj => cj.category.id === cat.id)
+						.map(cj => (
+							<option key={cj.id} value={cj.id}>
+								{cj.name}
+							</option>
+						))}
+				</optgroup>
+			))}
+		</select>
 	)
 })

@@ -4,7 +4,7 @@ import {RequestModel, LoadingState} from 'models/request'
 import {StatModel} from 'models/stat'
 
 export class StatStore {
-	@observable request = new RequestModel({query: getStats})
+	@observable private request = new RequestModel({query: getStats})
 
 	@computed get stats() {
 		return (this.request.response || []).map(StatModel.fromResponse)
