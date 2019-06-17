@@ -8,6 +8,7 @@ import {EquipmentModel} from 'models/equipment'
 
 export class GearPlannerStore {
 	@observable.ref classJob?: ClassJobModel
+	@observable.ref selectedEquipment?: EquipmentModel
 
 	private statStore: StatStore
 	private equipReq = new RequestModel({query: findEquipment})
@@ -46,16 +47,24 @@ export class GearPlannerStore {
 	constructor(opts: {statStore: StatStore}) {
 		this.statStore = opts.statStore
 
-		// Re-request the core list of equipment when filters are changed
 		reaction(
 			() => this.classJob,
-			classJob =>
-				classJob && this.equipReq.execute({abbreviation: classJob.abbreviation}),
+			classJob => {
+				// Clear existing state
+				this.selectedEquipment = undefined
+
+				// Re-request the core list of equipment
+				classJob && this.equipReq.execute({abbreviation: classJob.abbreviation})
+			},
 		)
 	}
 
 	@action setClassJob(classJob: ClassJobModel) {
 		this.classJob = classJob
+	}
+
+	@action selectEqipment(equipment: EquipmentModel) {
+		this.selectedEquipment = equipment
 	}
 }
 

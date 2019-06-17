@@ -3,12 +3,17 @@ import {GlobalStoreContext} from 'stores/context'
 import {observer} from 'mobx-react-lite'
 import {ClassJobFilter} from './ClassJobFilter'
 import {ClassJobModel} from 'models/classJob'
+import {EquipmentModel} from 'models/equipment'
 
 export const GearPlanner = observer(() => {
 	const {gearPlannerStore} = React.useContext(GlobalStoreContext)
 
-	const onSelect = (cj: ClassJobModel) => {
+	const onSelectClassJob = (cj: ClassJobModel) => {
 		gearPlannerStore.setClassJob(cj)
+	}
+
+	const onClickEquipment = (e: EquipmentModel) => {
+		gearPlannerStore.selectEqipment(e)
 	}
 
 	return (
@@ -17,7 +22,7 @@ export const GearPlanner = observer(() => {
 				gear planner (
 				{gearPlannerStore.classJob && gearPlannerStore.classJob.abbreviation})
 			</h2>
-			<ClassJobFilter onSelect={onSelect} />
+			<ClassJobFilter onSelect={onSelectClassJob} />
 			<hr />
 			<table>
 				<thead>
@@ -29,18 +34,26 @@ export const GearPlanner = observer(() => {
 					</tr>
 				</thead>
 				<tbody>
-					{gearPlannerStore.equipment.map(e => (
-						<tr key={e.id}>
-							<td>{e.name}</td>
-							{gearPlannerStore.visibleStats.map(stat => {
-								const gearStat = e.stats.find(s => s.id === stat.id)
-								const amount = gearStat ? gearStat.amount : '-'
-								return <td key={stat.id}>{amount}</td>
-							})}
-						</tr>
-					))}
+					{/* TODO: make this a component lel */}
+					{gearPlannerStore.equipment.map(e => {
+						const onClick = () => onClickEquipment(e)
+						return (
+							<tr key={e.id} onClick={onClick}>
+								<td>{e.name}</td>
+								{gearPlannerStore.visibleStats.map(stat => {
+									const gearStat = e.stats.find(s => s.id === stat.id)
+									const amount = gearStat ? gearStat.amount : '-'
+									return <td key={stat.id}>{amount}</td>
+								})}
+							</tr>
+						)
+					})}
 				</tbody>
 			</table>
+			<hr />
+			{gearPlannerStore.selectedEquipment
+				? gearPlannerStore.selectedEquipment.name
+				: 'nothing chosen'}
 		</>
 	)
 })
