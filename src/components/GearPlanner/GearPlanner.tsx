@@ -4,6 +4,8 @@ import {observer} from 'mobx-react-lite'
 import {ClassJobFilter} from './ClassJobFilter'
 import {ClassJobModel} from 'models/classJob'
 import {EquipmentModel} from 'models/equipment'
+import {MateriaSelect} from './MateriaSelect'
+import {MateriaModel} from 'models/materia'
 
 export const GearPlanner = observer(() => {
 	const {gearPlannerStore} = React.useContext(GlobalStoreContext)
@@ -43,8 +45,8 @@ export const GearPlanner = observer(() => {
 							<tr key={e.id} onClick={onClick}>
 								<td>{e.name}</td>
 								<td>
-									{shittyMateriaArray.map(() => (
-										<>[ ]</>
+									{shittyMateriaArray.map(i => (
+										<React.Fragment key={i}>[{e.materia[i] ? 'x' : ' '}]</React.Fragment>
 									))}
 								</td>
 								{gearPlannerStore.visibleStats.map(stat => {
@@ -58,9 +60,32 @@ export const GearPlanner = observer(() => {
 				</tbody>
 			</table>
 			<hr />
-			{gearPlannerStore.selectedEquipment
-				? gearPlannerStore.selectedEquipment.name
-				: 'nothing chosen'}
+			{gearPlannerStore.selectedEquipment ? (
+				<GearEditor equipment={gearPlannerStore.selectedEquipment} />
+			) : (
+				'nothing chosen'
+			)}
+		</>
+	)
+})
+
+// TODO: seperate file and shit
+const GearEditor = observer(({equipment: e}: {equipment: EquipmentModel}) => {
+	// TODO: use lodash or some shit
+	const shittyMateriaArray = [...Array(e.materiaSlots).keys()]
+	return (
+		<>
+			{e.name}
+			{shittyMateriaArray.map(i => {
+				const onSelect = (materia?: MateriaModel) => {
+					e.setMateria(i, materia)
+				}
+				return (
+					<div key={i}>
+						<MateriaSelect value={e.materia[i]} onSelect={onSelect} />
+					</div>
+				)
+			})}
 		</>
 	)
 })

@@ -21,6 +21,7 @@ export const ClassJobFilter = observer((props: Props) => {
 	}
 
 	// TODO: break this up a bit?
+	// TODO: this should be controlled.
 	return (
 		<select onChange={onSelect}>
 			{classJobStore.categories.map(cat => (

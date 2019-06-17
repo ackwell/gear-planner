@@ -1,6 +1,10 @@
 import {StatAmount} from './stat'
 import {EquipmentResponse} from 'api/equipment'
 import {createTransformer} from 'mobx-utils'
+import {observable, action} from 'mobx'
+import {MateriaModel} from './materia'
+
+type PossibleMateria = MateriaModel | undefined
 
 export class EquipmentModel {
 	id: number
@@ -9,6 +13,14 @@ export class EquipmentModel {
 	materiaSlots: number
 	stats: StatAmount[]
 	statHqModifiers: StatAmount[]
+
+	@observable materia: PossibleMateria[] = [
+		undefined,
+		undefined,
+		undefined,
+		undefined,
+		undefined,
+	]
 
 	constructor(opts: {
 		id: number
@@ -24,6 +36,12 @@ export class EquipmentModel {
 		this.materiaSlots = opts.materiaSlots
 		this.stats = opts.stats
 		this.statHqModifiers = opts.statHqModifiers
+	}
+
+	@action setMateria(slot: number, materia?: MateriaModel) {
+		// TODO: sanity check the slot no.
+		this.materia[slot] = materia
+		console.log(this.materia)
 	}
 
 	static fromResponse = createTransformer(
