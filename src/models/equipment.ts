@@ -24,6 +24,7 @@ export class EquipmentModel {
 	baseStats: StatAmount[]
 	statHqModifiers: StatAmount[]
 
+	// TODO: Advanced melding/overmelding
 	@observable materia: MateriaSlots = [
 		undefined,
 		undefined,
@@ -36,11 +37,11 @@ export class EquipmentModel {
 		const materiaAdjusters = this.materia
 			.filter(isDefined)
 			.map(materia => (stats: StatAmount[]) =>
-				this.adjustStatsWithMateria(stats, materia),
+				this.adjustStat(stats, materia.stat),
 			)
 
 		return [
-			// TODO: HQ modifiers
+			this.adjustWithHqStats,
 			...materiaAdjusters,
 			// TODO: Stat caps
 		]
@@ -71,17 +72,20 @@ export class EquipmentModel {
 		this.materia[slot] = materia
 	}
 
-	private adjustStatsWithMateria(stats: StatAmount[], materia: MateriaModel) {
+	private adjustWithHqStats = (stats: StatAmount[]) =>
+		this.statHqModifiers.reduce((acc, cur) => this.adjustStat(acc, cur), stats)
+
+	private adjustStat(stats: StatAmount[], adjustBy: StatAmount) {
 		const newStats = stats.slice()
 
-		const index = newStats.findIndex(stat => stat.id === materia.stat.id)
+		const index = newStats.findIndex(stat => stat.id === adjustBy.id)
 		if (index !== -1) {
 			newStats.splice(index, 1, {
-				...materia.stat,
-				amount: newStats[index].amount + materia.stat.amount,
+				...adjustBy,
+				amount: newStats[index].amount + adjustBy.amount,
 			})
 		} else {
-			newStats.push({...materia.stat})
+			newStats.push({...adjustBy})
 		}
 
 		return newStats

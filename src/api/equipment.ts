@@ -72,7 +72,8 @@ export const findEquipment = (opts: {abbreviation: string}) =>
 		columns,
 		query: bodybuilder()
 			.filter('term', `ClassJobCategory.${opts.abbreviation}`, 1)
-			.sort('LevelItem', 'desc'),
+			.sort('LevelItem', 'desc')
+			.size(100),
 	})
 		.json<XivapiListingResponse<EquipmentResponse>>()
 		.then(resp => resp.Results)
