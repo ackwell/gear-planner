@@ -18,7 +18,13 @@ export const getMateria = () =>
 	xivapiSearch({
 		indexes: ['item'],
 		columns,
-		query: bodybuilder().filter('exists', 'Materia.BaseParam'),
+		query: bodybuilder()
+			// Relying on xivapi's link to materia. Materia will have a valid BaseParam here.
+			.filter('exists', 'Materia.BaseParam')
+			// Old materia aren't removed, they just set the value to 0 - get rid of them
+			.filter('range', 'Materia.Value', {gt: 0})
+			// We want all the matching materia in one go, gimme gimme
+			.size(1000),
 	})
 		.json<XivapiListingResponse<MateriaResponse>>()
 		.then(resp => resp.Results)
