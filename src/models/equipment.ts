@@ -6,6 +6,14 @@ import {MateriaModel} from './materia'
 import {isDefined} from 'utils'
 
 type PossibleMateria = MateriaModel | undefined
+type MateriaSlots = [
+	PossibleMateria,
+	PossibleMateria,
+	PossibleMateria,
+	PossibleMateria,
+	PossibleMateria,
+]
+
 type Adjuster = (stats: StatAmount[]) => StatAmount[]
 
 export class EquipmentModel {
@@ -16,7 +24,7 @@ export class EquipmentModel {
 	baseStats: StatAmount[]
 	statHqModifiers: StatAmount[]
 
-	@observable materia: PossibleMateria[] = [
+	@observable materia: MateriaSlots = [
 		undefined,
 		undefined,
 		undefined,
@@ -61,7 +69,6 @@ export class EquipmentModel {
 	@action setMateria(slot: number, materia?: MateriaModel) {
 		// TODO: sanity check the slot no.
 		this.materia[slot] = materia
-		console.log(this.materia)
 	}
 
 	private adjustStatsWithMateria(stats: StatAmount[], materia: MateriaModel) {
