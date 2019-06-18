@@ -113,7 +113,7 @@ export class EquipmentModel {
 					{id: resp.BaseParam3TargetID, amount: resp.BaseParamValue3},
 					{id: resp.BaseParam4TargetID, amount: resp.BaseParamValue3},
 					{id: resp.BaseParam5TargetID, amount: resp.BaseParamValue5},
-				].filter(stat => stat.id !== 0),
+				].filter(stat => stat.id !== 0 && stat.amount !== 0),
 				statHqModifiers: [
 					{id: resp.BaseParamSpecial0TargetID, amount: resp.BaseParamValueSpecial0},
 					{id: resp.BaseParamSpecial1TargetID, amount: resp.BaseParamValueSpecial1},
