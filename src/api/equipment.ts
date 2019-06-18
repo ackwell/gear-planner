@@ -6,6 +6,12 @@ export interface EquipmentResponse {
 	Name: string
 	LevelItem: number
 	MateriaSlotCount: number
+	DamagePhys: number
+	DamageMag: number
+	BlockRate: number
+	Block: number
+	DefensePhys: number
+	DefenseMag: number
 
 	BaseParam0TargetID: number
 	BaseParam1TargetID: number
@@ -38,6 +44,12 @@ const columns = [
 	'Name',
 	'LevelItem',
 	'MateriaSlotCount',
+	'DamagePhys',
+	'DamageMag',
+	'BlockRate',
+	'Block',
+	'DefensePhys',
+	'DefenseMag',
 
 	// SAVE ME
 	'BaseParam0TargetID',

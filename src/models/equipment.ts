@@ -4,6 +4,7 @@ import {createTransformer} from 'mobx-utils'
 import {observable, action, computed} from 'mobx'
 import {MateriaModel} from './materia'
 import {isDefined} from 'utils'
+import {intrinsicStatMap} from 'data/stat'
 
 type PossibleMateria = MateriaModel | undefined
 type MateriaSlots = [
@@ -91,6 +92,7 @@ export class EquipmentModel {
 		return newStats
 	}
 
+	// TOOD: Look into cleaning this up, it's disgusting
 	static fromResponse = createTransformer(
 		(resp: EquipmentResponse) =>
 			new EquipmentModel({
@@ -99,6 +101,12 @@ export class EquipmentModel {
 				itemLevel: resp.LevelItem,
 				materiaSlots: resp.MateriaSlotCount,
 				baseStats: [
+					{id: intrinsicStatMap.DamagePhys, amount: resp.DamagePhys},
+					{id: intrinsicStatMap.DamageMag, amount: resp.DamageMag},
+					{id: intrinsicStatMap.BlockRate, amount: resp.BlockRate},
+					{id: intrinsicStatMap.Block, amount: resp.Block},
+					{id: intrinsicStatMap.DefensePhys, amount: resp.DefensePhys},
+					{id: intrinsicStatMap.DefenseMag, amount: resp.DefenseMag},
 					{id: resp.BaseParam0TargetID, amount: resp.BaseParamValue0},
 					{id: resp.BaseParam1TargetID, amount: resp.BaseParamValue1},
 					{id: resp.BaseParam2TargetID, amount: resp.BaseParamValue2},
