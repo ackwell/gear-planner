@@ -26,6 +26,8 @@ export const GearPlanner = observer(() => {
 			</h2>
 			<ClassJobFilter onSelect={onSelectClassJob} />
 			<hr />
+			{gearPlannerStore.itemLevels.map(i => JSON.stringify(i))}
+			<hr />
 			<table>
 				<thead>
 					<tr>

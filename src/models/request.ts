@@ -9,10 +9,11 @@ export enum LoadingState {
 
 type QueryFunction = (...params: any[]) => any
 type UnwrapPromise<T> = T extends Promise<infer U> ? U : T
+type UnwRet<T extends QueryFunction> = UnwrapPromise<ReturnType<T>>
 
 export class RequestModel<F extends QueryFunction> {
 	@observable.ref state: LoadingState = LoadingState.WAITING
-	@observable.ref response?: UnwrapPromise<ReturnType<F>>
+	@observable.ref response?: UnwRet<F>
 
 	private query: (...params: Parameters<F>) => ReturnType<F>
 
@@ -29,9 +30,10 @@ export class RequestModel<F extends QueryFunction> {
 		this.state = LoadingState.LOADING
 
 		try {
-			const response = yield this.query(...params)
+			const response = (yield this.query(...params)) as UnwRet<F>
 			this.state = LoadingState.COMPLETE
 			this.response = response
+			return response
 		} catch {
 			this.state = LoadingState.ERRORED
 		}
