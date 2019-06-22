@@ -10,8 +10,8 @@ export const intrinsicStatMap = {
 	DefenseMag: 24,
 }
 
-/** Maps item level columns to their BaseParam ID */
 type MapKey = Exclude<keyof ItemLevelResponse, 'ID'>
+/** Maps item level columns to their BaseParam ID */
 export const itemLevelStatMap: Record<MapKey, number> = {
 	Strength: 1,
 	Dexterity: 2,
@@ -31,4 +31,32 @@ export const itemLevelStatMap: Record<MapKey, number> = {
 	Control: 71,
 	Gathering: 72,
 	Perception: 73,
+}
+
+/** Maps BaseParam slots to their EquipSlotCategory ID */
+export enum BaseParamSlotMap {
+	'1HWpn%' = 1,
+	'OH%' = 2,
+	'Head%' = 3,
+	'Chest%' = 4,
+	'Hands%' = 5,
+	'Waist%' = 6,
+	'Legs%' = 7,
+	'Feet%' = 8,
+	'Earring%' = 9,
+	'Necklace%' = 10,
+	'Bracelet%' = 11,
+	'Ring%' = 12,
+	'2HWpn%' = 13,
+	// MH -or- OH
+	'ChestHead%' = 15,
+	// Body, Feet, Gloves, Legs
+	// Soul Crystal
+	'LegsFeet%' = 18,
+	'HeadChestHandsLegsFeet%' = 19,
+	'ChestLegsGloves%' = 20,
+	'ChestLegsFeet%' = 21,
+	// Unequippable
+
+	// 'ChestHeadLegsFeet%', ??
 }

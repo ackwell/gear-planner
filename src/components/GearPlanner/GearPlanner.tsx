@@ -26,8 +26,6 @@ export const GearPlanner = observer(() => {
 			</h2>
 			<ClassJobFilter onSelect={onSelectClassJob} />
 			<hr />
-			{gearPlannerStore.itemLevels.map(i => JSON.stringify(i))}
-			<hr />
 			<table>
 				<thead>
 					<tr>
@@ -45,7 +43,9 @@ export const GearPlanner = observer(() => {
 						const shittyMateriaArray = [...Array(e.materiaSlots).keys()]
 						return (
 							<tr key={e.id} onClick={onClick}>
-								<td>{e.name}</td>
+								<td>
+									{e.name} [{e.baseParamSlot}]
+								</td>
 								<td>
 									{shittyMateriaArray.map(i => (
 										<React.Fragment key={i}>[{e.materia[i] ? 'x' : ' '}]</React.Fragment>

@@ -4,7 +4,7 @@ import {createTransformer} from 'mobx-utils'
 import {observable, action, computed} from 'mobx'
 import {MateriaModel} from './materia'
 import {isDefined} from 'utils'
-import {intrinsicStatMap} from 'data/stat'
+import {intrinsicStatMap, BaseParamSlotMap} from 'data/stat'
 
 type PossibleMateria = MateriaModel | undefined
 type MateriaSlots = [
@@ -34,6 +34,8 @@ export class EquipmentModel {
 		undefined,
 	]
 
+	private equipSlotCategory: number
+
 	@computed private get adjusters(): Adjuster[] {
 		const materiaAdjusters = this.materia
 			.filter(isDefined)
@@ -52,6 +54,10 @@ export class EquipmentModel {
 		return this.adjusters.reduce((stats, adj) => adj(stats), this.baseStats)
 	}
 
+	@computed get baseParamSlot() {
+		return BaseParamSlotMap[this.equipSlotCategory]
+	}
+
 	constructor(opts: {
 		id: number
 		name: string
@@ -59,6 +65,7 @@ export class EquipmentModel {
 		materiaSlots: number
 		baseStats: StatAmount[]
 		statHqModifiers: StatAmount[]
+		equipSlotCategory: number
 	}) {
 		this.id = opts.id
 		this.name = opts.name
@@ -66,6 +73,7 @@ export class EquipmentModel {
 		this.materiaSlots = opts.materiaSlots
 		this.baseStats = opts.baseStats
 		this.statHqModifiers = opts.statHqModifiers
+		this.equipSlotCategory = opts.equipSlotCategory
 	}
 
 	@action setMateria(slot: number, materia?: MateriaModel) {
@@ -99,6 +107,7 @@ export class EquipmentModel {
 				id: resp.ID,
 				name: resp.Name,
 				itemLevel: resp.LevelItem,
+				equipSlotCategory: resp.EquipSlotCategoryTargetID,
 				materiaSlots: resp.MateriaSlotCount,
 				baseStats: [
 					{id: intrinsicStatMap.DamagePhys, amount: resp.DamagePhys},

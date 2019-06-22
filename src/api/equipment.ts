@@ -5,7 +5,9 @@ export interface EquipmentResponse {
 	ID: number
 	Name: string
 	LevelItem: number
+	EquipSlotCategoryTargetID: number
 	MateriaSlotCount: number
+
 	DamagePhys: number
 	DamageMag: number
 	BlockRate: number
@@ -43,6 +45,7 @@ const columns = [
 	'ID',
 	'Name',
 	'LevelItem',
+	'EquipSlotCategoryTargetID',
 	'MateriaSlotCount',
 	'DamagePhys',
 	'DamageMag',
