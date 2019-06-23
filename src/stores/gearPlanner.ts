@@ -49,7 +49,7 @@ export class GearPlannerStore {
 		)
 	}
 
-	@computed get itemLevels() {
+	@computed private get itemLevels() {
 		const ids = this.currentItemLevelIds
 
 		const ilvs = ids.map(id => this.ilvCache.get(id)).filter(isDefined)
@@ -69,6 +69,7 @@ export class GearPlannerStore {
 
 		reaction(() => this.classJob, this.reactToClassJob)
 		reaction(() => this.currentItemLevelIds, this.reactToItemLevelIds)
+		reaction(() => [this.itemLevels, this.equipment], this.reactToEquipIlv)
 	}
 
 	@action setClassJob(classJob: ClassJobModel) {
@@ -80,13 +81,15 @@ export class GearPlannerStore {
 	}
 
 	// Request a list of equipment on CJ update
-	@action.bound private reactToClassJob(classJob?: ClassJobModel) {
+	@action.bound private reactToClassJob() {
+		const {classJob} = this
 		this.selectedEquipment = undefined
 		classJob && this.equipReq.execute({abbreviation: classJob.abbreviation})
 	}
 
 	// Ensure we have cached data for all the current item levels
-	@action.bound private async reactToItemLevelIds(ids: number[]) {
+	@action.bound private async reactToItemLevelIds() {
+		const ids = this.currentItemLevelIds
 		const missing = ids.filter(id => !this.ilvCache.has(id))
 		if (missing.length === 0) {
 			return
@@ -103,6 +106,15 @@ export class GearPlannerStore {
 				this.ilvCache.set(model.id, model)
 			}),
 		)
+	}
+
+	// Keep equipment up to date with the item level models
+	@action.bound private reactToEquipIlv() {
+		const {itemLevels, equipment} = this
+
+		// Build a map of item levels by their ID
+		const map = itemLevels.reduce((map, ilv) => map.set(ilv.id, ilv), new Map())
+		equipment.forEach(equip => (equip.itemLevelModel = map.get(equip.itemLevel)))
 	}
 }
 

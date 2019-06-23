@@ -20,7 +20,7 @@ export class ItemLevelModel {
 			id: resp.ID,
 			stats: Object.entries(itemLevelStatMap).map(([key, id]) => ({
 				stat: opts.statStore.forId(id),
-				amount: resp[key as keyof ItemLevelResponse],
+				amount: resp[key as keyof typeof itemLevelStatMap],
 			})),
 		})
 }

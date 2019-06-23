@@ -3,7 +3,8 @@ import {EquipmentResponse} from 'api/equipment'
 import {observable, action, computed} from 'mobx'
 import {MateriaModel} from './materia'
 import {isDefined} from 'utils'
-import {intrinsicStatMap, BaseParamSlotMap} from 'data/stat'
+import {intrinsicStatMap} from 'data/stat'
+import {ItemLevelModel} from './itemLevel'
 import {StatStore} from 'stores/stat'
 
 type PossibleMateria = MateriaModel | undefined
@@ -34,6 +35,8 @@ export class EquipmentModel {
 		undefined,
 	]
 
+	@observable itemLevelModel?: ItemLevelModel
+
 	private equipSlotCategory: number
 
 	@computed private get adjusters(): Adjuster[] {
@@ -43,19 +46,11 @@ export class EquipmentModel {
 				this.adjustStat(stats, materia.stat),
 			)
 
-		return [
-			this.adjustWithHqStats,
-			...materiaAdjusters,
-			// TODO: Stat caps
-		]
+		return [this.adjustWithHqStats, ...materiaAdjusters, this.adjustWithStatCaps]
 	}
 
 	@computed get stats() {
 		return this.adjusters.reduce((stats, adj) => adj(stats), this.baseStats)
-	}
-
-	@computed get baseParamSlot() {
-		return BaseParamSlotMap[this.equipSlotCategory]
 	}
 
 	constructor(opts: {
@@ -100,40 +95,72 @@ export class EquipmentModel {
 		return newStats
 	}
 
+	private adjustWithStatCaps = (stats: StatAmount[]) => {
+		if (!this.itemLevelModel) {
+			return stats
+		}
+
+		const newStats = stats.slice()
+
+		this.itemLevelModel.stats.forEach(ilvStat => {
+			const index = newStats.findIndex(stat => stat.stat.id === ilvStat.stat.id)
+			if (index === -1) {
+				return
+			}
+			const stat = newStats[index]
+
+			const slotCap = stat.stat.slotCaps.find(
+				cap => cap.slot === this.equipSlotCategory,
+			)
+			const capPct = slotCap ? slotCap.percent : 0
+			const statCap = Math.round(ilvStat.amount * (capPct / 100))
+
+			if (stat.amount > statCap) {
+				console.log(this.name, stat.amount, statCap)
+				newStats.splice(index, 1, {
+					...stat,
+					amount: statCap,
+				})
+			}
+		})
+
+		return newStats
+	}
+
 	// TOOD: Look into cleaning this up, it's disgusting
 	static fromResponse = (
 		resp: EquipmentResponse,
 		opts: {statStore: StatStore},
 	) =>
-			new EquipmentModel({
-				id: resp.ID,
-				name: resp.Name,
-				itemLevel: resp.LevelItem,
-				equipSlotCategory: resp.EquipSlotCategoryTargetID,
-				materiaSlots: resp.MateriaSlotCount,
-				baseStats: [
-					{id: intrinsicStatMap.DamagePhys, amount: resp.DamagePhys},
-					{id: intrinsicStatMap.DamageMag, amount: resp.DamageMag},
-					{id: intrinsicStatMap.BlockRate, amount: resp.BlockRate},
-					{id: intrinsicStatMap.Block, amount: resp.Block},
-					{id: intrinsicStatMap.DefensePhys, amount: resp.DefensePhys},
-					{id: intrinsicStatMap.DefenseMag, amount: resp.DefenseMag},
-					{id: resp.BaseParam0TargetID, amount: resp.BaseParamValue0},
-					{id: resp.BaseParam1TargetID, amount: resp.BaseParamValue1},
-					{id: resp.BaseParam2TargetID, amount: resp.BaseParamValue2},
-					{id: resp.BaseParam3TargetID, amount: resp.BaseParamValue3},
-					{id: resp.BaseParam4TargetID, amount: resp.BaseParamValue3},
-					{id: resp.BaseParam5TargetID, amount: resp.BaseParamValue5},
+		new EquipmentModel({
+			id: resp.ID,
+			name: resp.Name,
+			itemLevel: resp.LevelItem,
+			equipSlotCategory: resp.EquipSlotCategoryTargetID,
+			materiaSlots: resp.MateriaSlotCount,
+			baseStats: [
+				{id: intrinsicStatMap.DamagePhys, amount: resp.DamagePhys},
+				{id: intrinsicStatMap.DamageMag, amount: resp.DamageMag},
+				{id: intrinsicStatMap.BlockRate, amount: resp.BlockRate},
+				{id: intrinsicStatMap.Block, amount: resp.Block},
+				{id: intrinsicStatMap.DefensePhys, amount: resp.DefensePhys},
+				{id: intrinsicStatMap.DefenseMag, amount: resp.DefenseMag},
+				{id: resp.BaseParam0TargetID, amount: resp.BaseParamValue0},
+				{id: resp.BaseParam1TargetID, amount: resp.BaseParamValue1},
+				{id: resp.BaseParam2TargetID, amount: resp.BaseParamValue2},
+				{id: resp.BaseParam3TargetID, amount: resp.BaseParamValue3},
+				{id: resp.BaseParam4TargetID, amount: resp.BaseParamValue3},
+				{id: resp.BaseParam5TargetID, amount: resp.BaseParamValue5},
 			]
 				.filter(stat => stat.id !== 0 && stat.amount !== 0)
 				.map(stat => toStatAmount(stat, opts)),
-				statHqModifiers: [
-					{id: resp.BaseParamSpecial0TargetID, amount: resp.BaseParamValueSpecial0},
-					{id: resp.BaseParamSpecial1TargetID, amount: resp.BaseParamValueSpecial1},
-					{id: resp.BaseParamSpecial2TargetID, amount: resp.BaseParamValueSpecial2},
-					{id: resp.BaseParamSpecial3TargetID, amount: resp.BaseParamValueSpecial3},
-					{id: resp.BaseParamSpecial4TargetID, amount: resp.BaseParamValueSpecial3},
-					{id: resp.BaseParamSpecial5TargetID, amount: resp.BaseParamValueSpecial5},
+			statHqModifiers: [
+				{id: resp.BaseParamSpecial0TargetID, amount: resp.BaseParamValueSpecial0},
+				{id: resp.BaseParamSpecial1TargetID, amount: resp.BaseParamValueSpecial1},
+				{id: resp.BaseParamSpecial2TargetID, amount: resp.BaseParamValueSpecial2},
+				{id: resp.BaseParamSpecial3TargetID, amount: resp.BaseParamValueSpecial3},
+				{id: resp.BaseParamSpecial4TargetID, amount: resp.BaseParamValueSpecial3},
+				{id: resp.BaseParamSpecial5TargetID, amount: resp.BaseParamValueSpecial5},
 			]
 				.filter(stat => stat.id !== 0)
 				.map(stat => toStatAmount(stat, opts)),

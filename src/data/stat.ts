@@ -34,28 +34,28 @@ export const itemLevelStatMap: Record<MapKey, number> = {
 }
 
 /** Maps BaseParam slots to their EquipSlotCategory ID */
-export enum BaseParamSlotMap {
-	'1HWpn%' = 1,
-	'OH%' = 2,
-	'Head%' = 3,
-	'Chest%' = 4,
-	'Hands%' = 5,
-	'Waist%' = 6,
-	'Legs%' = 7,
-	'Feet%' = 8,
-	'Earring%' = 9,
-	'Necklace%' = 10,
-	'Bracelet%' = 11,
-	'Ring%' = 12,
-	'2HWpn%' = 13,
+export const baseParamSlotMap = {
+	'1HWpn%': 1,
+	'OH%': 2,
+	'Head%': 3,
+	'Chest%': 4,
+	'Hands%': 5,
+	'Waist%': 6,
+	'Legs%': 7,
+	'Feet%': 8,
+	'Earring%': 9,
+	'Necklace%': 10,
+	'Bracelet%': 11,
+	'Ring%': 12,
+	'2HWpn%': 13,
 	// MH -or- OH
-	'ChestHead%' = 15,
+	'ChestHead%': 15,
 	// Body, Feet, Gloves, Legs
 	// Soul Crystal
-	'LegsFeet%' = 18,
-	'HeadChestHandsLegsFeet%' = 19,
-	'ChestLegsGloves%' = 20,
-	'ChestLegsFeet%' = 21,
+	'LegsFeet%': 18,
+	'HeadChestHandsLegsFeet%': 19,
+	'ChestLegsGloves%': 20,
+	'ChestLegsFeet%': 21,
 	// Unequippable
 
 	// 'ChestHeadLegsFeet%', ??
