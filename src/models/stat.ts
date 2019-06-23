@@ -2,7 +2,7 @@ import {StatResponse} from 'api/stat'
 import {createTransformer} from 'mobx-utils'
 
 export interface StatAmount {
-	id: StatModel['id']
+	stat: StatModel
 	amount: number
 }
 

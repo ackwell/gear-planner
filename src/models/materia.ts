@@ -1,6 +1,6 @@
-import {createTransformer} from 'mobx-utils'
 import {MateriaResponse} from 'api/materia'
 import {StatAmount} from './stat'
+import {StatStore} from 'stores/stat'
 
 export class MateriaModel {
 	id: number
@@ -13,12 +13,13 @@ export class MateriaModel {
 		this.stat = opts.stat
 	}
 
-	static fromResponse = createTransformer(
-		(resp: MateriaResponse) =>
-			new MateriaModel({
-				id: resp.ID,
-				name: resp.Name,
-				stat: {id: resp.Materia.BaseParam.ID, amount: resp.Materia.Value},
-			}),
-	)
+	static fromResponse = (resp: MateriaResponse, opts: {statStore: StatStore}) =>
+		new MateriaModel({
+			id: resp.ID,
+			name: resp.Name,
+			stat: {
+				stat: opts.statStore.forId(resp.Materia.BaseParam.ID),
+				amount: resp.Materia.Value,
+			},
+		})
 }

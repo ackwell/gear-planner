@@ -43,16 +43,14 @@ export const GearPlanner = observer(() => {
 						const shittyMateriaArray = [...Array(e.materiaSlots).keys()]
 						return (
 							<tr key={e.id} onClick={onClick}>
-								<td>
-									{e.name} [{e.baseParamSlot}]
-								</td>
+								<td>{e.name}</td>
 								<td>
 									{shittyMateriaArray.map(i => (
 										<React.Fragment key={i}>[{e.materia[i] ? 'x' : ' '}]</React.Fragment>
 									))}
 								</td>
 								{gearPlannerStore.visibleStats.map(stat => {
-									const gearStat = e.stats.find(s => s.id === stat.id)
+									const gearStat = e.stats.find(s => s.stat.id === stat.id)
 									const amount = gearStat ? gearStat.amount : '-'
 									return <td key={stat.id}>{amount}</td>
 								})}

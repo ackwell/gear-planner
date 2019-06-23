@@ -10,6 +10,11 @@ export class StatStore {
 		return (this.request.response || []).map(StatModel.fromResponse)
 	}
 
+	forId(id: StatModel['id']) {
+		const stat = this.stats.find(stat => stat.id === id)
+		return stat ? stat : new StatModel({id, name: 'Unknown'})
+	}
+
 	load() {
 		// Only need to load stats once
 		if (this.request.state !== LoadingState.WAITING) {

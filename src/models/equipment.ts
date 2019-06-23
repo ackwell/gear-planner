@@ -1,10 +1,10 @@
 import {StatAmount} from './stat'
 import {EquipmentResponse} from 'api/equipment'
-import {createTransformer} from 'mobx-utils'
 import {observable, action, computed} from 'mobx'
 import {MateriaModel} from './materia'
 import {isDefined} from 'utils'
 import {intrinsicStatMap, BaseParamSlotMap} from 'data/stat'
+import {StatStore} from 'stores/stat'
 
 type PossibleMateria = MateriaModel | undefined
 type MateriaSlots = [
@@ -87,7 +87,7 @@ export class EquipmentModel {
 	private adjustStat(stats: StatAmount[], adjustBy: StatAmount) {
 		const newStats = stats.slice()
 
-		const index = newStats.findIndex(stat => stat.id === adjustBy.id)
+		const index = newStats.findIndex(stat => stat.stat.id === adjustBy.stat.id)
 		if (index !== -1) {
 			newStats.splice(index, 1, {
 				...adjustBy,
@@ -101,8 +101,10 @@ export class EquipmentModel {
 	}
 
 	// TOOD: Look into cleaning this up, it's disgusting
-	static fromResponse = createTransformer(
-		(resp: EquipmentResponse) =>
+	static fromResponse = (
+		resp: EquipmentResponse,
+		opts: {statStore: StatStore},
+	) =>
 			new EquipmentModel({
 				id: resp.ID,
 				name: resp.Name,
@@ -122,7 +124,9 @@ export class EquipmentModel {
 					{id: resp.BaseParam3TargetID, amount: resp.BaseParamValue3},
 					{id: resp.BaseParam4TargetID, amount: resp.BaseParamValue3},
 					{id: resp.BaseParam5TargetID, amount: resp.BaseParamValue5},
-				].filter(stat => stat.id !== 0 && stat.amount !== 0),
+			]
+				.filter(stat => stat.id !== 0 && stat.amount !== 0)
+				.map(stat => toStatAmount(stat, opts)),
 				statHqModifiers: [
 					{id: resp.BaseParamSpecial0TargetID, amount: resp.BaseParamValueSpecial0},
 					{id: resp.BaseParamSpecial1TargetID, amount: resp.BaseParamValueSpecial1},
@@ -130,7 +134,16 @@ export class EquipmentModel {
 					{id: resp.BaseParamSpecial3TargetID, amount: resp.BaseParamValueSpecial3},
 					{id: resp.BaseParamSpecial4TargetID, amount: resp.BaseParamValueSpecial3},
 					{id: resp.BaseParamSpecial5TargetID, amount: resp.BaseParamValueSpecial5},
-				].filter(stat => stat.id !== 0),
-			}),
-	)
+			]
+				.filter(stat => stat.id !== 0)
+				.map(stat => toStatAmount(stat, opts)),
+		})
 }
+
+const toStatAmount = (
+	raw: {id: number; amount: number},
+	opts: {statStore: StatStore},
+): StatAmount => ({
+	stat: opts.statStore.forId(raw.id),
+	amount: raw.amount,
+})

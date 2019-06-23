@@ -14,18 +14,20 @@ export class GearPlannerStore {
 
 	private statStore: StatStore
 	private equipReq = new RequestModel({query: findEquipment})
-	@observable private ilvCache = new Map<ItemLevelModel['id'], ItemLevelModel>()
+	@observable private ilvCache = new Map<number, ItemLevelModel>()
 	private ilvReq = new RequestModel({query: getItemLevels})
 
 	@computed get equipment() {
-		return (this.equipReq.response || []).map(EquipmentModel.fromResponse)
+		return (this.equipReq.response || []).map(resp =>
+			EquipmentModel.fromResponse(resp, {statStore: this.statStore}),
+		)
 	}
 
 	@computed get visibleStats() {
 		// TODO: this, but better
 		const statIds = Array.from(
 			this.equipment.reduce((acc, cur) => {
-				cur.stats.forEach(stat => acc.add(stat.id))
+				cur.stats.forEach(stat => acc.add(stat.stat.id))
 				return acc
 			}, new Set<number>()),
 		)
@@ -97,7 +99,7 @@ export class GearPlannerStore {
 
 		runInAction(() =>
 			ilvs.forEach(ilv => {
-				const model = ItemLevelModel.fromResponse(ilv)
+				const model = ItemLevelModel.fromResponse(ilv, {statStore: this.statStore})
 				this.ilvCache.set(model.id, model)
 			}),
 		)
