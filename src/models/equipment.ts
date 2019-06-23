@@ -96,18 +96,21 @@ export class EquipmentModel {
 	}
 
 	private adjustWithStatCaps = (stats: StatAmount[]) => {
-		if (!this.itemLevelModel) {
+		const {itemLevelModel} = this
+
+		if (!itemLevelModel) {
 			return stats
 		}
 
 		const newStats = stats.slice()
 
-		this.itemLevelModel.stats.forEach(ilvStat => {
-			const index = newStats.findIndex(stat => stat.stat.id === ilvStat.stat.id)
-			if (index === -1) {
+		newStats.forEach((stat, index) => {
+			const ilvStat = itemLevelModel.stats.find(
+				ilvStat => ilvStat.stat.id === stat.stat.id,
+			)
+			if (!ilvStat) {
 				return
 			}
-			const stat = newStats[index]
 
 			const slotCap = stat.stat.slotCaps.find(
 				cap => cap.slot === this.equipSlotCategory,
@@ -116,7 +119,6 @@ export class EquipmentModel {
 			const statCap = Math.round(ilvStat.amount * (capPct / 100))
 
 			if (stat.amount > statCap) {
-				console.log(this.name, stat.amount, statCap)
 				newStats.splice(index, 1, {
 					...stat,
 					amount: statCap,
